@@ -24,7 +24,7 @@ public class User {
     @Column(name="email", unique = true)
     private String email;
 
-    @Column(name="cpf-cnpj", unique = true)
+    @Column(name="cpf_cnpj", unique = true)
     private int document;
 
     @Column(name="password")
@@ -33,11 +33,16 @@ public class User {
     @Column(name="balance")
     private BigDecimal balance;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name="user_type_id")
     private UserType userType;
 
-    private enum UserType{
-        COMMON,
-        SHOPKEEPER;
+    public User(String fullName, String email, int document, String pass, BigDecimal balance, UserType userType) {
+        this.fullName = fullName;
+        this.email = email;
+        this.document = document;
+        this.pass = pass;
+        this.balance = balance;
+        this.userType = userType;
     }
 }
