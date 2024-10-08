@@ -12,4 +12,6 @@ public class BaseApplicationException extends RuntimeException {
         return pb;
     }
 
+
+
 }
