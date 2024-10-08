@@ -18,19 +18,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="full_name")
+    @Column(name="full_name", nullable = false)
     private String fullName;
 
-    @Column(name="email", unique = true)
+    @Column(name="email", unique = true, nullable = false)
     private String email;
 
-    @Column(name="cpf_cnpj", unique = true)
+    @Column(name="cpf_cnpj", unique = true, nullable = false)
     private int document;
 
-    @Column(name="password")
+    @Column(name="password", nullable = false)
     private String pass;
 
-    @Column(name="balance")
+    @Column(name="balance", nullable = false)
     private BigDecimal balance;
 
     @ManyToOne
@@ -44,5 +44,19 @@ public class User {
         this.pass = pass;
         this.balance = balance;
         this.userType = userType;
+    }
+    public void debit(BigDecimal value){
+        this.balance = this.balance.subtract(value);
+    }
+    public void credit(BigDecimal value){
+        this.balance = this.balance.add(value);
+    }
+
+    public boolean blockShopkeeperTransfer(){
+        return this.userType.equals(UserType.Enum.SHOPKEEPER.get());
+    }
+
+    public boolean userNotEnoughBalance(BigDecimal value){
+        return this.balance.doubleValue()<value.doubleValue();
     }
 }

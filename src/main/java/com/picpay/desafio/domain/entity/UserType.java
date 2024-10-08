@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "user_type")
 @AllArgsConstructor
@@ -22,8 +24,8 @@ public class UserType {
         USER(1L, "user"),
         SHOPKEEPER(2L, "shopkeeper");
 
-        private Long id;
-        private String description;
+        private final Long id;
+        private final String description;
 
         Enum(Long id, String description) {
             this.id = id;
@@ -36,6 +38,19 @@ public class UserType {
         public String toString(){
             return description;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserType userType = (UserType) o;
+        return Objects.equals(id, userType.id) && Objects.equals(description, userType.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description);
     }
 
     public static UserType fromString(String value) {
