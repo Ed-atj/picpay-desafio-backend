@@ -12,7 +12,7 @@ public class UserAlreadyExistsException extends BaseApplicationException{
 
     @Override
     public ProblemDetail problemDetail(){
-        var pb = ProblemDetail.forStatus(HttpStatus.UNPROCESSABLE_ENTITY);
+        ProblemDetail pb = ProblemDetail.forStatus(HttpStatus.UNPROCESSABLE_ENTITY);
 
         pb.setTitle("User already exists.");
         pb.setDetail(message);

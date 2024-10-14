@@ -7,7 +7,7 @@ public class UserTypeTransferNotAllowedException extends BaseApplicationExceptio
 
     @Override
     public ProblemDetail problemDetail(){
-        var pb = ProblemDetail.forStatus(HttpStatus.FORBIDDEN);
+        ProblemDetail pb = ProblemDetail.forStatus(HttpStatus.FORBIDDEN);
 
 
         pb.setTitle("UserType doesn't have permission.");

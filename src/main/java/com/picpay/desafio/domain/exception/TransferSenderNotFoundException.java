@@ -11,7 +11,7 @@ public class TransferSenderNotFoundException extends BaseApplicationException{
 
     @Override
     public ProblemDetail problemDetail(){
-        var pb = ProblemDetail.forStatus(HttpStatus.UNPROCESSABLE_ENTITY);
+        ProblemDetail pb = ProblemDetail.forStatus(HttpStatus.UNPROCESSABLE_ENTITY);
 
         pb.setTitle("Transfer sender not found.");
         pb.setDetail("There's no sender with id:" + senderId + ".");

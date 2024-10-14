@@ -8,7 +8,7 @@ public class AuthorizationFailedException extends BaseApplicationException{
 
     @Override
     public ProblemDetail problemDetail(){
-        var pb = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        ProblemDetail pb = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
 
         pb.setTitle("Authorization Failed.");
         pb.setDetail("Authorization wasn't effectuated.");

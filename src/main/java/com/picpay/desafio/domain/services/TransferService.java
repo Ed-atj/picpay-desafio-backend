@@ -8,7 +8,6 @@ import com.picpay.desafio.domain.exception.TransferSenderNotFoundException;
 import com.picpay.desafio.domain.exception.UserNotEnoughBalanceException;
 import com.picpay.desafio.domain.exception.UserTypeTransferNotAllowedException;
 import com.picpay.desafio.domain.mapper.TransferMapper;
-import com.picpay.desafio.domain.mapper.UserMapper;
 import com.picpay.desafio.domain.repositories.TransferRepository;
 import com.picpay.desafio.domain.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -23,24 +22,22 @@ public class TransferService {
 
     public static final Logger logger = LoggerFactory.getLogger(TransferService.class);
     private final TransferRepository transferRepository;
-    private final AuthorizationService authorizationService;
-    private final NotificationService notificationService;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
     private final TransferMapper transferMapper;
-    private final UserMapper userMapper;
 
     @Transactional
     public TransferDto transfer(TransferDto transferDto){
 
-        logger.info("Starting transfer from {} to {} for amount {}",
+            logger.info("Starting transfer from {} to {} for amount {}.",
             transferDto.sender(),
             transferDto.receiver(),
             transferDto.value());
 
 
-        var sender = userRepository.findById(transferDto.sender()).orElseThrow(
+        User sender = userRepository.findById(transferDto.sender()).orElseThrow(
             () -> new TransferSenderNotFoundException(transferDto.sender()));
-        var receiver = userRepository.findById(transferDto.receiver()).orElseThrow(
+        User receiver = userRepository.findById(transferDto.receiver()).orElseThrow(
             () -> new TransferReceiverNotFoundException(transferDto.receiver()));
 
         validateTransfer(transferDto, sender);
@@ -48,19 +45,19 @@ public class TransferService {
 
         sender.debit(transferDto.value());
         receiver.credit(transferDto.value());
-        var transfer = new Transfer(sender, receiver, transferDto.value());
+        Transfer transfer = new Transfer(sender, receiver, transferDto.value());
 
         userRepository.save(sender);
         userRepository.save(receiver);
-        var transferResult = transferRepository.save(transfer);
+        Transfer transferResult = transferRepository.save(transfer);
 
-        var transferReturn = transferMapper.toDto(transferResult);
+        TransferDto transferReturn = transferMapper.toDto(transferResult);
 
         notificationService.sendNotification(transferReturn)
-            .subscribe(
-                response -> logger.info("Notification sent successfully: {}", response),
-                e -> logger.error("Error while sending notification.", e)
-            );
+        .subscribe(
+            response -> logger.info("Sending notification to Notification Service: {}", response),
+                e -> logger.error("Error while sending notification to Service.", e)
+                );
         return transferReturn;
     }
 

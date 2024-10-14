@@ -11,7 +11,7 @@ public class TransferReceiverNotFoundException extends BaseApplicationException{
 
     @Override
     public ProblemDetail problemDetail(){
-        var pb = ProblemDetail.forStatus(HttpStatus.UNPROCESSABLE_ENTITY);
+        ProblemDetail pb = ProblemDetail.forStatus(HttpStatus.UNPROCESSABLE_ENTITY);
         pb.setTitle("Transfer receiver not found.");
         pb.setDetail("There's no receiver with id: "+ receiverId +".");
         return pb;

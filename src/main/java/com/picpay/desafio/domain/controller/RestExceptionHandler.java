@@ -8,6 +8,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.List;
+
 @RestControllerAdvice
 public class RestExceptionHandler {
 
@@ -19,12 +21,12 @@ public class RestExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 
-        var fieldErros = e.getFieldErrors()
-                .stream()
-                .map(f -> new InvalidParam(f.getField(), f.getDefaultMessage()))
-                .toList();
+        List<InvalidParam> fieldErros = e.getFieldErrors()
+            .stream()
+            .map(f -> new InvalidParam(f.getField(), f.getDefaultMessage()))
+            .toList();
 
-        var pb = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        ProblemDetail pb = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
 
         pb.setTitle("Your request parameters didn't validate.");
         pb.setProperty("invalid-params", fieldErros);
@@ -34,7 +36,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(TransferSenderNotFoundException.class)
     public ProblemDetail handleTransferSenderNotFound(TransferSenderNotFoundException e) {
-        var problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
         problemDetail.setTitle("Transfer sender not found");
         problemDetail.setDetail(e.getMessage());
         return problemDetail;

@@ -6,7 +6,7 @@ import org.springframework.http.ProblemDetail;
 public class UserNotEnoughBalanceException extends BaseApplicationException {
     @Override
     public ProblemDetail problemDetail(){
-        var pb = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        ProblemDetail pb = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
 
 
         pb.setTitle("Not enough balance.");
